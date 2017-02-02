@@ -1,0 +1,75 @@
+<script src="/javascripts/Chart.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+<h1>{{0.PitchNo}}</h1>
+<p>Welcome to </p>
+
+
+<canvas id="myChart" width="50" height="50"></canvas>
+<script>
+$(document).ready(function() {
+
+        $.getJSON("http://127.0.0.1:8080/api/strikezone/Get", function (result) {
+            var d= [];
+            var b={};
+            var color=[];
+            for (i=0; i< result.length; i++) {
+                b={
+                    x:result[i].PlateLocSide,
+                    y:result[i].PlateLocHeight,
+                    r:15
+                };
+                d.push(b)
+                if(result[i].StrikeProbability > .5){
+                    color.push('rgba(255, 0, 0, 0.2)')
+                }
+                else{
+                    color.push('rgba(0, 0, 225, 1)')
+                }
+            }
+
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                 type: 'bubble',
+                 data: {
+                     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                    datasets: [{
+                        label: '# of Votes',
+                         data: d,
+
+                        backgroundColor: color,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                scales: {
+                yAxes: [{
+                    ticks:{
+                        max:4,
+                        min:0,
+                    }
+
+                }]}}
+
+            });
+        })
+    console.log("strikezone!")
+
+
+
+})
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+<button>Get JSON data</button>
+<div></div>
+
